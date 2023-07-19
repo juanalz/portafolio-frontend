@@ -12,14 +12,18 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { fetchLogout } from '@lib/slice/authSlice';
 
 const pages = ['usuarios', 'proyectos', 'exp. laboral', 'habilidades', 'conocimientos', 'testimonios', 'contactenos'];
 const settings = ['Perfil', 'Cuenta', 'Dashboard', 'Cerrar sesión'];
 
 function ResponsiveAppBar() {
+  const navigate = useNavigate()
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const dispatch = useDispatch()
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -35,6 +39,17 @@ function ResponsiveAppBar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const handleMenu = (typeSetting) => {
+    if (typeSetting === 'Cerrar sesión') {
+      logout();
+    }
+  };
+
+  const logout = () => {
+    dispatch(fetchLogout());
+    navigate('/login')
+  }
 
   return (
     <AppBar position="static">
@@ -152,7 +167,7 @@ function ResponsiveAppBar() {
             >
               {settings.map((setting) => (
                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+                  <Typography textAlign="center" onClick={() => {handleMenu(setting)}}>{setting}</Typography>
                 </MenuItem>
               ))}
             </Menu>

@@ -10,6 +10,7 @@ import axios from 'axios';
 import { IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import Cookies from 'js-cookie';
 
 export default function ListUser({load, setIdUpdate, setIdDelete}) {
 
@@ -17,7 +18,12 @@ export default function ListUser({load, setIdUpdate, setIdDelete}) {
 
     useEffect(() => {
         const fetchData = async () => {
-            const response = await axios.get(`${import.meta.env.VITE_URL_SERVER}api/users/consultUsers`);
+            console.log(Cookies.get('token'));
+            const response = await axios.get(`${import.meta.env.VITE_URL_SERVER}api/users/consultUsers`, {}, {
+                headers: {
+                    'x-token': Cookies.get('token')
+                }
+            });
             console.log(response.data.users);
             setRows(response.data.users);
         }

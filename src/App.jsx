@@ -6,12 +6,30 @@ import Users from '@pages/users/index'
 import '@assets/app.css'
 import Projects from '@pages/projects'
 import Login from '@pages/auth/login'
+import { useSelector, useDispatch } from 'react-redux'
+import Cookies from 'js-cookie'
+import { useEffect } from 'react'
+import { fetchValidateToken } from '@lib/slice/authSlice';
 
 function App() {
 
+  const user = useSelector(state => state.auth.user)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    const fetchData = async () => {  
+      const response = await dispatch(fetchValidateToken());
+      console.log(response);
+    }
+    fetchData();
+  }, [])
+  
+
   return (
     <Router>
-      <ResponsiveAppBar />
+      {user &&
+        <ResponsiveAppBar />      
+      }
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/login' element={<Login />} />

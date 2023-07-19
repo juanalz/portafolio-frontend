@@ -7,12 +7,24 @@ import DeleteUser from '@components/molecules/Users/DeleteUser/DeleteUser';
 import UpdateUser from '@components/molecules/Users/UpdateUser/UpdateUser';
 import { useSelector, useDispatch } from 'react-redux'
 import { decrement, increment } from '../../lib/slice/counterSlice'
+import { useNavigate } from 'react-router-dom';
 
 export default function Users() {
 
+    const navigate = useNavigate();
     const [load, setLoad] = useState(false);
     const [idDelete, setIdDelete] = useState('');
     const [idUpdate, setIdUpdate] = useState('');
+    const user = useSelector(state => state.auth.user);
+    const loading = useSelector(state => state.auth.loading);
+
+    if (loading) {
+      return <>Cargando...</>;
+    }
+
+    if (!user) {
+      return navigate("/login");
+    }
 
     // const count = useSelector((state) => state.counter.value)
     // const dispatch = useDispatch()

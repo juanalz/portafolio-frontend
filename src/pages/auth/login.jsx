@@ -3,13 +3,24 @@ import TextField from '@mui/material/TextField';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import Container from '@mui/material/Container';
-import { useDispatch, useSelector } from "react-redux"
-import { fetchLogin } from '../../lib/slice/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchLogin } from '@lib/slice/authSlice';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
 
+    const navigate = useNavigate()
     const dispatch = useDispatch()
     const user = useSelector(state => state.auth.user)
+    const loading = useSelector(state => state.auth.loading)
+
+    if (loading) {
+        return <>Cargando...</>;
+    }
+
+    if (user) {
+        return navigate("/usuarios");
+    }
 
      return (
         <>
@@ -29,7 +40,9 @@ const Login = () => {
                     onSubmit={async(values, { setSubmitting }) => {
 
                         const response = await dispatch(fetchLogin(values));
-                        console.log('Respondse Login', response);
+                        if (response.payload.user) {
+                            return navigate("/usuarios");
+                        }
                     }}
                 >
                 {({

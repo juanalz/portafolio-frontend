@@ -10,7 +10,8 @@ export default defineConfig({
             '@pages': '/src/pages',
             '@api': '/src/api',
             '@hooks': '/src/hooks',
-            '@assets': '/src/assets'
+            '@assets': '/src/assets',
+            '@lib': '/src/lib'
         }
     }
 })
